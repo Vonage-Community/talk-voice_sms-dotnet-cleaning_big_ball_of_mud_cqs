@@ -1,0 +1,24 @@
+version: '3.4'
+
+services:
+  web:
+    image: ${DOCKER_REGISTRY-}coolcompetition
+    container_name: cool-comp-web
+    build:
+      context: .
+      dockerfile: CoolCompetition/Dockerfile
+
+  db:
+    image: "mcr.microsoft.com/mssql/server"
+    container_name: cool-comp-db
+    volumes:
+      - sqlsystem:/var/opt/mssql/
+      - sqldata:/var/opt/sqlserver/data
+      - sqllog:/var/opt/sqlserver/log
+      - sqlbackup:/var/opt/sqlserver/backup
+
+volumes:
+  sqlsystem:
+  sqldata:
+  sqllog:
+  sqlbackup:

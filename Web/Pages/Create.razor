@@ -1,0 +1,42 @@
+﻿@page "/create"
+@using MediatR
+@using Application.Competitions.Commands
+@using Application.Infrastructure.Validation
+@inject ISender _sender
+@inject NavigationManager _navManager
+<div class="container">
+    <h1 class="display-4">Create Competition</h1>
+    <div class="row">
+        <div class="col-6">
+            <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" @bind="CompetitionName">
+            </div>
+            <button type="button" class="btn btn-primary" @onclick="OnSubmit">Submit</button>
+        </div>
+        <div class="col-6">
+            @Errors
+        </div>
+    </div>
+</div>
+
+@code {
+    protected string CompetitionName;
+    protected string Errors;
+
+    protected async Task OnSubmit()
+    {
+        Errors = string.Empty;
+
+        var command = new CreateCompetition(Guid.NewGuid(), CompetitionName);
+        try
+        {
+            await _sender.Send(command);
+            _navManager.NavigateTo("/");
+        }
+        catch (ValidationException ex)
+        {
+            Errors = ex.Message;
+        }
+    }
+}

@@ -1,0 +1,24 @@
+﻿@page
+@model Web.Pages.AddEntryModel
+@{
+    ViewData["Title"] = "Add Entry";
+}
+<div class="container">
+    <h1 class="display-4">Add Entry</h1>
+    <div class="row">
+        <div class="col-6">
+            <form method="post">
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" id="name" name="name">
+                </div>
+                <div class="mb-3">
+                    <label for="telephone" class="form-label">Telephone Number</label>
+                    <input type="text" class="form-control" id="telephone" name="telephone">
+                </div>
+                <input type="hidden" name="competitionId" value="@ViewData["CompetitionId"]"/>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </div>
+</div>

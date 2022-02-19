@@ -1,0 +1,123 @@
+﻿@page "/"
+@using MediatR
+@using Application.Competitions.Models
+@using Application.Competitions.Queries
+@using Application.Competitions.Commands
+<PageTitle>Competition</PageTitle>
+
+@inject ISender _sender
+@inject NavigationManager _navManager
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1 class="display-4">Competitions</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Entries</th>
+                        <th scope="col">Winner</th>
+                        <th scope="col"></th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var competition in _competitions)
+                    {
+                        <tr>
+                            <th scope="row">@competition.Name</th>
+                            <td>
+                                @if (competition.IsLive)
+                                {
+                                    <span class='competition-status'>LIVE!</span>
+                                }
+                                else if (competition.IsClosed)
+                                {
+                                    <span class='competition-status'>Closed</span>
+                                }
+                                else
+                                {
+                                    <span class='competition-status'>Ready</span>
+                                }
+                            </td>
+                            <td class="text-center">@competition.Entries.Count</td>
+                            <td>@competition.Winner</td>
+                            <td>
+                                @if (!competition.IsLive && !competition.IsClosed)
+                                {
+                                    <button type="button" class="btn btn-success" @onclick="()=>OnStartCompetition(competition.Id)">Start</button>
+                                }
+                                else if (!competition.IsClosed)
+                                {
+                                    <button type="button" class="btn btn-danger" @onclick="()=>OnChooseWinner(competition.Id)">Choose Winner</button>
+                                }
+                            </td>
+                            <td>
+                                @if (competition.IsLive && !competition.IsClosed)
+                                {
+                                    <button type="button" class="btn btn-info" @onclick="()=>OnAddEntry(competition.Id)">Add Entry</button>
+                                }
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th scope="row" colspan="4"><button class="btn btn-primary" @onclick="OnCreateCompetition">Create Competition</button></th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
+
+@code
+{
+    private IEnumerable<CompetitionModel> _competitions = Array.Empty<CompetitionModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await RefreshCompetitions();
+    }
+
+    protected async Task OnStartCompetition(Guid competitionId)
+    {
+        var command = new StartCompetition(competitionId);
+        await _sender.Send(command);
+
+        await RefreshCompetitions();
+    }
+
+    protected async Task OnChooseWinner(Guid competitionId)
+    {
+        var command = new ChooseWinner(competitionId);
+        await _sender.Send(command);
+
+        await RefreshCompetitions();
+    }
+
+    protected void OnAddEntry(Guid competitionId)
+    {
+        _navManager.NavigateTo($"/competition/{competitionId}/addentry");
+    }
+
+    protected void OnCreateCompetition()
+    {
+        _navManager.NavigateTo("create");
+    }
+
+    private async Task RefreshCompetitions()
+    {
+        var query = new FindCompetitions(1, 10);
+        _competitions = await _sender.Send(query);
+    }
+
+
+}

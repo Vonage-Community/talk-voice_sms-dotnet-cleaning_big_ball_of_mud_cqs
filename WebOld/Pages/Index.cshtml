@@ -1,0 +1,106 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Competitions";
+}
+@section scripts{
+<script>
+    const startElements = document.querySelectorAll('.start-link');
+    startElements.forEach(el => {
+        el.addEventListener('click', (e) => {
+            const competitionId = e.currentTarget.dataset['id'];
+            e.preventDefault();
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    window.location.reload();
+                }
+            };
+            xhr.open('post', '/api/competitions/start/' + competitionId);
+            xhr.send();
+        });
+    });
+
+    const winnerElements = document.querySelectorAll('.choose-winner-link');
+    winnerElements.forEach(el => {
+        el.addEventListener('click', (e) => {
+            const competitionId = e.currentTarget.dataset['id'];
+            e.preventDefault();
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    window.location.reload();
+                }
+            };
+            xhr.open('post', '/api/competitions/choose-winner/' + competitionId);
+            xhr.send();
+        });
+    });
+</script>
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <h1 class="display-4">Competitions</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Winner</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var competition in Model.Competitions)
+                    {
+                        <tr>
+                            <th scope="row">@competition.Name</th>
+                            <td>
+                                @if (competition.IsLive)
+                                {
+                                    <span class='competition-status'>LIVE!</span>
+                                }
+                                else if (competition.IsClosed)
+                                {
+                                    <span class='competition-status'>Closed</span>
+                                }
+                                else
+                                {
+                                    <span class='competition-status'>Ready</span>
+                                }
+                            </td>
+                            <td>@competition.Winner</td>
+                            <td>
+                                @if (!competition.IsLive && !competition.IsClosed)
+                                {
+                                    <a class="start-link" data-id="@competition.Id">Start</a>
+                                }
+                                else if (!competition.IsClosed)
+                                {
+                                    <a class="choose-winner-link" data-id="@competition.Id">Choose Winner</a>
+                                }
+
+                                @if (competition.IsLive && !competition.IsClosed)
+                                {
+                                    <a asp-page="./AddEntry" asp-route-competitionid="@competition.Id">Add Entry</a>
+                                }
+
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th scope="row" colspan="4"><a asp-page="./CreateCompetition">Create Competition</a></th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</div>
