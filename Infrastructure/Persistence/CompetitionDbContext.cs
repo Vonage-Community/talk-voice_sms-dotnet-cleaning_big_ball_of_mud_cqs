@@ -24,12 +24,14 @@ public class CompetitionDbContext : DbContext, ICompetitionDbContext
                 .IsRequired(true)
                 .HasMaxLength(50);
 
+            entity.Property(e => e.TelephoneNumber)
+                .IsRequired(true)
+                .HasMaxLength(20);
+
             entity.OwnsMany(e => e.Entries);
             
             entity.OwnsOne(e => e.Winner, w=>
             {
-                // w.WithOwner();
-                // w.Property(p=>p.Name).
             }).Navigation(p=>p.Winner).IsRequired(false);
         });
     }

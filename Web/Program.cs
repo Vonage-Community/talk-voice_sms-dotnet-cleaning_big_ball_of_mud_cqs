@@ -8,6 +8,7 @@ using FluentValidation;
 using Infrastructure.Communications;
 using Infrastructure.Persistence;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Web.Infrastructure;
 
@@ -16,6 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddMvc(options => options.EnableEndpointRouting = false);
 
 // Database Context
 var connectionString = builder.Configuration.GetConnectionString("SQLDBConnection");
@@ -41,13 +43,8 @@ builder.Services.AddAutoMapper(c =>
     c.AddProfile<EntryMappingProfile>();
 });
 
-builder.Services.AddSingleton<VonageSettings>(provider =>
-{
-    var section = builder.Configuration.GetSection("VonageSettings");
-    return section.Get<VonageSettings>();
-});
-
 // Communications
+builder.Services.Configure<VonageSettings>(builder.Configuration.GetSection("VonageSettings"));
 builder.Services.AddTransient<ISmsSender, VonageSmsSender>();
 builder.Services.AddTransient<IPhoneCaller, VonagePhoneCaller>();
 
@@ -66,6 +63,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseMvcWithDefaultRoute();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 app.Run();

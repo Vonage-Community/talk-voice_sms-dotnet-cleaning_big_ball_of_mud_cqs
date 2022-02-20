@@ -1,4 +1,5 @@
 ﻿using Application.Infrastructure.Communications;
+using Microsoft.Extensions.Options;
 using Vonage;
 using Vonage.Request;
 using Vonage.Voice;
@@ -11,9 +12,9 @@ public class VonagePhoneCaller : IPhoneCaller
 {
     private readonly VonageSettings _settings;
 
-    public VonagePhoneCaller(VonageSettings settings)
+    public VonagePhoneCaller(IOptions<VonageSettings> settings)
     {
-        _settings = settings;
+        _settings = settings.Value;
     }
 
     public async Task SendVoiceMessage(string toNumber, string message)

@@ -1,4 +1,5 @@
 ﻿using Application.Infrastructure.Communications;
+using Microsoft.Extensions.Options;
 using Vonage;
 using Vonage.Request;
 
@@ -7,10 +8,10 @@ namespace Infrastructure.Communications
     public class VonageSmsSender : ISmsSender
     {
         private readonly VonageSettings _settings;
-
-        public VonageSmsSender(VonageSettings settings)
+        
+        public VonageSmsSender(IOptions<VonageSettings> settings)
         {
-            _settings = settings;
+            _settings = settings.Value;
         }
 
 

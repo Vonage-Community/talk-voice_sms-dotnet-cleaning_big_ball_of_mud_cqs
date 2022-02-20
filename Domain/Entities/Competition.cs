@@ -12,6 +12,8 @@ public class Competition
 
     public bool IsClosed { get; private set; }
 
+    public string TelephoneNumber { get; private set; }
+
     public Entry Winner { get; private set; }
 
     private List<Entry> _entries;

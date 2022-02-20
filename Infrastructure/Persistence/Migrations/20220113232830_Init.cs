@@ -17,6 +17,7 @@ namespace Infrastructure.Persistence.Migrations
                     Name = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     IsLive = table.Column<bool>(type: "bit", nullable: false),
                     IsClosed = table.Column<bool>(type: "bit", nullable: false),
+                    TelephoneNumber = table.Column<string>(type: "nvarchar(30)", nullable: false),
                     Winner_Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Winner_TelephoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
