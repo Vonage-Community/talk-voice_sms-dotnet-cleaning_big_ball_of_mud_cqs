@@ -15,7 +15,7 @@ public class CreateCompetitionHandler : IRequestHandler<CreateCompetition>
 
     public async Task<Unit> Handle(CreateCompetition command, CancellationToken cancellationToken)
     {
-        var competition = Competition.Create(command.Id, command.Name);
+        var competition = Competition.Create(command.Id, command.Name, command.Telephone);
 
         _db.Competitions.Add(competition);
         await _db.SaveChangesAsync(cancellationToken);

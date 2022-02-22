@@ -1,5 +1,3 @@
-
-using System.Dynamic;
 using Application.Competitions.Commands;
 using Application.Competitions.Queries;
 using MediatR;
@@ -20,7 +18,7 @@ public class SmsController : ControllerBase
         _sender = sender ?? throw new ArgumentNullException(nameof(sender));
     }
     
-    [HttpPost("inbound")]
+    [HttpGet("inbound")]
     public async Task<ActionResult> Inbound()
     { 
         // parse inbound sms

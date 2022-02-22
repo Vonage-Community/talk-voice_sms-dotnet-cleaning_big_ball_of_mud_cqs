@@ -12,11 +12,8 @@ public class WinnerChosenSmsHandler : INotificationHandler<WinnerChosen>
         _smsSender = smsSender ?? throw new ArgumentNullException(nameof(smsSender));
     }
 
-
-    public Task Handle(WinnerChosen notification, CancellationToken cancellationToken)
+    public async Task Handle(WinnerChosen notification, CancellationToken cancellationToken)
     {
-        _smsSender.SendSms(notification.WinnerTelephoneNumber, $"Congratulations you have won the {notification.CompetitionName} competition.");
-        
-        return Task.CompletedTask;
+        await _smsSender.SendSms(notification.WinnerTelephoneNumber, $"Congratulations you have won the {notification.CompetitionName} competition.");
     }
 }

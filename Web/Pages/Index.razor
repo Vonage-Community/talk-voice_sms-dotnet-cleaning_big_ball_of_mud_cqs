@@ -22,7 +22,6 @@
                         <th scope="col">Name</th>
                         <th scope="col">Status</th>
                         <th scope="col">Entries</th>
-                        <th scope="col">Winner</th>
                         <th scope="col"></th>
                         <th scope="col"></th>
                     </tr>
@@ -47,7 +46,6 @@
                                 }
                             </td>
                             <td class="text-center">@competition.Entries.Count</td>
-                            <td>@competition.Winner</td>
                             <td>
                                 @if (!competition.IsLive && !competition.IsClosed)
                                 {
@@ -59,11 +57,10 @@
                                 }
                             </td>
                             <td>
-                                @if (competition.IsLive && !competition.IsClosed)
+                                @if (competition.IsLive && !competition.IsClosed && false)
                                 {
                                     <button type="button" class="btn btn-info" @onclick="()=>OnAddEntry(competition.Id)">Add Entry</button>
                                 }
-
                             </td>
                         </tr>
                     }

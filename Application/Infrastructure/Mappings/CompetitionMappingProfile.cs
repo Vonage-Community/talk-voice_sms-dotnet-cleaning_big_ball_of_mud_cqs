@@ -9,6 +9,6 @@ public class CompetitionMappingProfile : Profile
     public CompetitionMappingProfile()
     {
         CreateMap<Competition, CompetitionModel>()
-            .ForMember(x=>x.Winner, opt=>opt.MapFrom(src=> src.Winner.Name));
+            .ForMember(x => x.Winner, opt => opt.MapFrom(src => src.Winner.Name));
     }
 }

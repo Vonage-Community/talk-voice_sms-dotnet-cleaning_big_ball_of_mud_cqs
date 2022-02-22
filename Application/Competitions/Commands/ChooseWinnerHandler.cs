@@ -1,13 +1,11 @@
 ﻿using Application.Competitions.Events;
-using Application.Infrastructure.Exceptions;
 using Application.Infrastructure.Persistence;
-using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Competitions.Commands;
 
-public class ChooseWinnerHandler : IRequestHandler<ChooseWinner>
+public class ChooseWinnerHandler : AsyncRequestHandler<ChooseWinner>
 {
     private readonly ICompetitionDbContext _db;
     private readonly IPublisher _publisher;
@@ -18,23 +16,20 @@ public class ChooseWinnerHandler : IRequestHandler<ChooseWinner>
         _publisher = publisher ?? throw new ArgumentNullException(nameof(publisher));
     }
 
-    public async Task<Unit> Handle(ChooseWinner command, CancellationToken cancellationToken)
+    protected override async Task Handle(ChooseWinner command, CancellationToken cancellationToken)
     {
         // get and check we have competition
-        var competition = await _db.Competitions.FirstOrDefaultAsync(x=>x.Id == command.CompetitionId, cancellationToken);
-        if (competition == null)
-        {
-            throw new NotFoundException(nameof(Competition), command.CompetitionId);
-        }
+        var competition = await _db.Competitions
+            .FirstOrDefaultAsync(x => x.Id == command.CompetitionId, cancellationToken);
 
         // choose winner and persist
         competition.ChooseWinner();
         await _db.SaveChangesAsync(cancellationToken);
 
         // send event
-        var winnerChosen = new WinnerChosen(competition.Name, competition.Winner.Name, competition.Winner.TelephoneNumber);
-        await _publisher.Publish(winnerChosen, cancellationToken);
+        var winnerChosen = new WinnerChosen(competition.Name,
+            competition.Winner.Name, competition.Winner.TelephoneNumber);
 
-        return Unit.Value;
+        await _publisher.Publish(winnerChosen, cancellationToken);
     }
 }

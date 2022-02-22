@@ -78,14 +78,11 @@ public class AddEntryToComeptitionTests : IClassFixture<TestFxiture>
         context.Database.EnsureDeleted();
         context.Database.EnsureCreated();
 
-        var aaa = new Competition(new Guid("b53c2235-7e54-4b91-90d8-fb4fb1485b7c"), "AAA");
-        // aaa.AddEntry(new Entry(Guid.NewGuid(), "Anthony", "+440712345768"));
-        // aaa.AddEntry(new Entry(Guid.NewGuid(), "Arron", "+440765466548"));
-        // aaa.AddEntry(new Entry(Guid.NewGuid(), "Alex", "+4407145664568"));
+        var aaa = new Competition(new Guid("b53c2235-7e54-4b91-90d8-fb4fb1485b7c"), "AAA", "1234567890");
 
-        var bbb = new Competition(new Guid("c488cf2a-c8b8-42c1-bb47-f264881ee5f3"), "BBB");
+        var bbb = new Competition(new Guid("c488cf2a-c8b8-42c1-bb47-f264881ee5f3"), "BBB", "1234567890");
 
-        var ccc = new Competition(new Guid("1ef1107d-23d3-4bf8-88ce-86f166192571"), "CCC");
+        var ccc = new Competition(new Guid("1ef1107d-23d3-4bf8-88ce-86f166192571"), "CCC", "1234567890");
         // ccc.AddEntry(new Entry(Guid.NewGuid(), "Carl", "+440712345768"));
         // ccc.AddEntry(new Entry(Guid.NewGuid(), "Chris", "+440712345768"));
         // ccc.AddEntry(new Entry(Guid.NewGuid(), "Colin", "+440712345768"));

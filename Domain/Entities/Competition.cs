@@ -22,15 +22,16 @@ public class Competition
 
     private Competition() { }
 
-    public Competition(Guid id, string name)
+    public Competition(Guid id, string name, string telephone)
     {
         Id = id;
         Name = name;
+        TelephoneNumber = telephone;
     }
 
-    public static Competition Create(Guid id, string name)
+    public static Competition Create(Guid id, string name, string telephone)
     {
-        return new Competition(id, name);
+        return new Competition(id, name, telephone);
     }
 
     public void AddEntry(Entry entry)

@@ -4,7 +4,7 @@ namespace Application.Competitions.Commands;
 
 public class ChooseWinner : IRequest
 {
-    public Guid CompetitionId { get;init; }
+    public Guid CompetitionId { get; }
 
     public ChooseWinner(Guid competitionId)
     {
