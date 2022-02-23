@@ -17,9 +17,18 @@ public class LoggingBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest,
     {
         var logger = _loggerFactory.CreateLogger(request.GetType());
 
-        logger.LogInformation($"********************** Starting to handler {request.GetType().Name} **********************");
+        logger.LogInformation($"********************** Starting to handle {request.GetType().Name} **********************");
 
-        var response = await next();
+        TResponse response;
+        try
+        {
+            response = await next();
+        }
+        catch(Exception ex)
+        {
+            logger.LogError(ex, $"********************** Error in {request.GetType().Name} **********************");
+            throw;
+        }
 
         logger.LogInformation($"********************** Finsihed handling {request.GetType().Name} **********************");
 
